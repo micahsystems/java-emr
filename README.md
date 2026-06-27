@@ -5,3 +5,10 @@ A demo Electronic Medical Record system built with Java, Spring Boot, and Postgr
 - View all Patients
 - PostgreSQL persistence
 - Rest API with Spring boot
+## Current Features 06/26/26
+- Encounters
+- Medications 
+- Allergies 
+- Vitals 
+- Lab Results 
+- Diagnoses 
