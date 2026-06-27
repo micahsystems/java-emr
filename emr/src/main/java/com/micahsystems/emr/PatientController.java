@@ -1,10 +1,14 @@
 package com.micahsystems.emr;
+
+import jakarta.validation.Valid;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+@Validated
+@Valid
 @RestController
 @RequestMapping("/patients")
 public class PatientController {
@@ -12,10 +16,14 @@ public class PatientController {
     public PatientController(PatientRepository patientRepository) {
         this.patientRepository = patientRepository;
     }
-    // GET all patients
     @GetMapping
     public List<Patient> getAllPatients() {
         return patientRepository.findAll();
+    }
+    // GET search patients by last name
+    @GetMapping("/search")
+    public List<Patient> searchPatients(@RequestParam String lastName) {
+        return patientRepository.findByLastNameContainingIgnoreCase(lastName);
     }
     // GET one patient by ID
     @GetMapping("/{id}")
@@ -26,12 +34,12 @@ public class PatientController {
     }
     // POST create a new patient
     @PostMapping
-    public Patient createPatient(@RequestBody Patient patient) {
+    public Patient createPatient(@Valid @RequestBody Patient patient) {
         return patientRepository.save(patient);
     }
     // PUT update an existing patient
     @PutMapping("/{id}")
-    public ResponseEntity<Patient> updatePatient(@PathVariable Long id, @RequestBody Patient updated) {
+    public ResponseEntity<Patient> updatePatient(@Valid @PathVariable Long id, @RequestBody Patient updated) {
         return patientRepository.findById(id)
                 .map(patient -> {
                     patient.setFirstName(updated.getFirstName());
